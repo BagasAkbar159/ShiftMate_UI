@@ -1,0 +1,3034 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ShiftMate</title>
+
+  <style>
+    :root {
+      --navy: #10233f;
+      --navy-2: #183456;
+      --orange: #ff7a1a;
+      --orange-dark: #e96408;
+      --cream: #f8f7f3;
+      --white: #ffffff;
+      --text: #172033;
+      --muted: #778197;
+      --border: #e8eaf0;
+      --green: #27a269;
+      --red: #e34d59;
+      --shadow: 0 18px 45px rgba(16, 35, 63, .16);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255, 122, 26, .08), transparent 25%),
+        #e9edf3;
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* =========================================================
+       DEVICE
+    ========================================================= */
+
+    .device {
+      position: relative;
+      width: 390px;
+      height: 844px;
+      flex: 0 0 390px;
+      overflow: hidden;
+      background: var(--cream);
+      border: 8px solid #111827;
+      border-radius: 43px;
+      box-shadow:
+        0 35px 80px rgba(0, 0, 0, .28),
+        inset 0 0 0 1px rgba(255,255,255,.15);
+    }
+
+    .device::before {
+      content: "";
+      position: absolute;
+      z-index: 9999;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 145px;
+      height: 27px;
+      background: #111827;
+      border-radius: 0 0 18px 18px;
+    }
+
+    .device::after {
+      content: "";
+      position: absolute;
+      z-index: 9999;
+      top: 8px;
+      left: calc(50% + 30px);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #25334a;
+      box-shadow: inset 0 0 0 2px #080d15;
+    }
+
+    .app {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* =========================================================
+       SCREEN SYSTEM
+    ========================================================= */
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--cream);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(30px);
+      transition:
+        opacity .25s ease,
+        transform .32s cubic-bezier(.2,.8,.2,1);
+    }
+
+    .screen.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+    }
+
+    .screen.exit-left {
+      transform: translateX(-30px);
+    }
+
+    .scroll {
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-bottom: 105px;
+      scrollbar-width: none;
+    }
+
+    .scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* =========================================================
+       COMMON
+    ========================================================= */
+
+    .top-space {
+      height: 38px;
+    }
+
+    .page-pad {
+      padding: 0 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--orange);
+      color: white;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 18px;
+      box-shadow: 0 8px 18px rgba(255,122,26,.22);
+    }
+
+    .brand-name {
+      font-weight: 900;
+      letter-spacing: -.5px;
+      font-size: 19px;
+      color: var(--navy);
+    }
+
+    .brand-name span {
+      color: var(--orange);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: -.8px;
+    }
+
+    h2 {
+      font-size: 21px;
+      letter-spacing: -.4px;
+    }
+
+    h3 {
+      font-size: 15px;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: white;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+    }
+
+    .back-btn {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 13px;
+      background: rgba(255,255,255,.8);
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      min-height: 53px;
+      border: 0;
+      border-radius: 15px;
+      background: var(--orange);
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 10px 22px rgba(255,122,26,.2);
+      transition: transform .15s, background .15s;
+    }
+
+    .primary-btn:active {
+      transform: scale(.98);
+      background: var(--orange-dark);
+    }
+
+    .outline-btn {
+      width: 100%;
+      min-height: 53px;
+      border: 1.5px solid var(--navy);
+      border-radius: 15px;
+      background: white;
+      color: var(--navy);
+      font-weight: 800;
+    }
+
+    .danger-btn {
+      width: 100%;
+      min-height: 53px;
+      border: 0;
+      background: #fff0f1;
+      color: var(--red);
+      border-radius: 15px;
+      font-weight: 800;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 7px 22px rgba(20, 35, 60, .055);
+    }
+
+    /* =========================================================
+       LOGIN
+    ========================================================= */
+
+    #loginScreen {
+      background:
+        radial-gradient(circle at 90% 8%, rgba(255,122,26,.15), transparent 30%),
+        linear-gradient(145deg, #fffdf9 0%, #f7f8f6 100%);
+    }
+
+    .login-content {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 74px 25px 25px;
+    }
+
+    .login-hero {
+      margin-top: 74px;
+    }
+
+    .login-hero h1 {
+      max-width: 310px;
+      margin-top: 18px;
+    }
+
+    .login-hero p {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 300px;
+    }
+
+    .login-actions {
+      margin-top: 45px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .role-btn {
+      min-height: 78px;
+      padding: 14px 17px;
+      border-radius: 18px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: transform .15s;
+    }
+
+    .role-btn:active {
+      transform: scale(.985);
+    }
+
+    .role-btn.primary {
+      background: var(--orange);
+      border: 0;
+      color: white;
+      box-shadow: 0 12px 25px rgba(255,122,26,.2);
+    }
+
+    .role-btn.secondary {
+      background: white;
+      border: 1.5px solid var(--navy);
+      color: var(--navy);
+    }
+
+    .role-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      flex: 0 0 46px;
+      background: rgba(255,255,255,.18);
+    }
+
+    .secondary .role-icon {
+      background: #eef2f7;
+    }
+
+    .role-copy strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .role-copy small {
+      opacity: .75;
+      font-size: 12px;
+    }
+
+    .login-footer {
+      margin-top: auto;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .login-footer span {
+      color: var(--orange);
+      font-weight: 800;
+    }
+
+    /* =========================================================
+       LOADING
+    ========================================================= */
+
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(16,35,63,.72);
+      backdrop-filter: blur(5px);
+      display: none;
+      place-items: center;
+    }
+
+    .loading-overlay.show {
+      display: grid;
+    }
+
+    .loader-box {
+      width: 110px;
+      height: 110px;
+      border-radius: 25px;
+      background: white;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .spinner {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 4px solid #e7ebf1;
+      border-top-color: var(--orange);
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================================================
+       APP HEADER
+    ========================================================= */
+
+    .app-header {
+      padding: 50px 20px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .profile-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: #e8edf4;
+      color: var(--navy);
+      font-weight: 900;
+      border: 2px solid white;
+    }
+
+    .avatar.orange {
+      background: #fff0e4;
+      color: var(--orange);
+    }
+
+    /* =========================================================
+       HOME
+    ========================================================= */
+
+    .greeting {
+      padding: 7px 20px 18px;
+    }
+
+    .greeting .eyebrow {
+      margin-bottom: 7px;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 20px 18px;
+      scrollbar-width: none;
+    }
+
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .chip.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: white;
+    }
+
+    .section {
+      padding: 4px 20px 18px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .section-heading span {
+      font-size: 11px;
+      color: var(--orange);
+      font-weight: 800;
+    }
+
+    /* =========================================================
+       SHIFT CARDS
+    ========================================================= */
+
+    .shift-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .shift-card {
+      padding: 15px;
+      cursor: pointer;
+      transition: transform .15s;
+    }
+
+    .shift-card:active {
+      transform: scale(.985);
+    }
+
+    .shift-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .shift-title {
+      display: flex;
+      gap: 11px;
+    }
+
+    .shift-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: #f1f4f8;
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+      flex: 0 0 42px;
+    }
+
+    .shift-name {
+      font-weight: 850;
+      font-size: 14px;
+    }
+
+    .shift-place {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .safe-badge {
+      color: var(--green);
+      background: #eaf8f1;
+      padding: 5px 8px;
+      border-radius: 8px;
+      height: fit-content;
+      font-size: 9px;
+      font-weight: 900;
+    }
+
+    .shift-meta {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .pay {
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    /* =========================================================
+       EMPLOYER HOME
+    ========================================================= */
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .quick-action {
+      padding: 15px;
+      min-height: 100px;
+      text-align: left;
+      border-radius: 17px;
+      border: 0;
+    }
+
+    .quick-action.primary {
+      background: var(--orange);
+      color: white;
+    }
+
+    .quick-action.secondary {
+      background: var(--navy);
+      color: white;
+    }
+
+    .quick-icon {
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+
+    .quick-action strong {
+      display: block;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .quick-action small {
+      opacity: .7;
+      font-size: 9px;
+    }
+
+    .active-shift {
+      padding: 14px;
+    }
+
+    .active-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .active-row + .active-row {
+      border-top: 1px solid var(--border);
+      margin-top: 13px;
+      padding-top: 13px;
+    }
+
+    .day-pill {
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: #f0f3f7;
+      color: var(--navy);
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    /* =========================================================
+       BOTTOM NAV
+    ========================================================= */
+
+    .bottom-nav {
+      position: absolute;
+      z-index: 100;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      height: 68px;
+      border-radius: 21px;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(225,228,234,.9);
+      box-shadow: 0 12px 30px rgba(20,35,60,.12);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 6px;
+    }
+
+    .nav-item {
+      border: 0;
+      background: transparent;
+      color: #9aa2b0;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      gap: 2px;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .nav-item span:first-child {
+      font-size: 18px;
+    }
+
+    .nav-item.active {
+      color: var(--orange);
+      background: #fff4eb;
+    }
+
+    /* =========================================================
+       DETAIL
+    ========================================================= */
+
+    .detail-header {
+      padding: 50px 20px 17px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .detail-title {
+      padding: 0 20px 20px;
+    }
+
+    .detail-title .shift-icon {
+      width: 54px;
+      height: 54px;
+      float: left;
+      margin-right: 13px;
+    }
+
+    .detail-title h1 {
+      font-size: 22px;
+      padding-top: 3px;
+    }
+
+    .detail-title p {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .detail-earn {
+      clear: both;
+      margin-top: 20px;
+      background: var(--navy);
+      color: white;
+      border-radius: 19px;
+      padding: 20px;
+    }
+
+    .detail-earn small {
+      opacity: .65;
+      font-size: 10px;
+    }
+
+    .detail-earn strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 27px;
+    }
+
+    .escrow {
+      margin: 0 20px 18px;
+      padding: 17px;
+      background: #effaf4;
+      border: 1px solid #d5efdf;
+      border-radius: 18px;
+    }
+
+    .escrow-title {
+      color: var(--green);
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .escrow-flow {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 14px 0;
+    }
+
+    .flow-step {
+      flex: 1;
+      text-align: center;
+      font-size: 8px;
+      color: var(--muted);
+    }
+
+    .flow-dot {
+      width: 25px;
+      height: 25px;
+      margin: 0 auto 5px;
+      border-radius: 50%;
+      background: white;
+      display: grid;
+      place-items: center;
+      border: 1px solid #cce8d8;
+    }
+
+    .escrow p {
+      font-size: 11px;
+      color: #4e6b5a;
+      line-height: 1.45;
+    }
+
+    .sticky-cta {
+      position: absolute;
+      z-index: 20;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+    }
+
+    /* =========================================================
+       BOTTOM SHEET
+    ========================================================= */
+
+    .sheet-backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 500;
+      background: rgba(9,18,32,.48);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+
+    .sheet-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .bottom-sheet {
+      position: absolute;
+      z-index: 501;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-height: 88%;
+      background: white;
+      border-radius: 28px 28px 0 0;
+      padding: 10px 20px 28px;
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+      overflow-y: auto;
+    }
+
+    .bottom-sheet.show {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 42px;
+      height: 4px;
+      border-radius: 99px;
+      background: #dce0e7;
+      margin: 4px auto 20px;
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .sheet-close {
+      border: 0;
+      background: #f1f3f6;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      color: var(--muted);
+    }
+
+    .form-section {
+      margin-bottom: 19px;
+    }
+
+    .form-section label {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .smart-suggestion {
+      background: #fff6ee;
+      border: 1px solid #ffe2ce;
+      color: #9a531f;
+      padding: 12px;
+      border-radius: 13px;
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    .option-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .option {
+      flex: 1;
+      padding: 11px 8px;
+      border-radius: 12px;
+      background: #f5f6f8;
+      border: 1px solid transparent;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .option.selected {
+      background: #fff1e7;
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .counter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f5f6f8;
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .counter button {
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 9px;
+      background: white;
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .budget {
+      background: var(--navy);
+      color: white;
+      border-radius: 16px;
+      padding: 15px;
+    }
+
+    .budget-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      opacity: .8;
+    }
+
+    .budget-total {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,.14);
+      display: flex;
+      justify-content: space-between;
+      font-weight: 900;
+    }
+
+    /* =========================================================
+       MATCHING
+    ========================================================= */
+
+    .matching-header {
+      padding: 50px 20px 20px;
+    }
+
+    .match-card {
+      margin: 0 20px 11px;
+      padding: 15px;
+    }
+
+    .match-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .match-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: #e8edf4;
+      display: grid;
+      place-items: center;
+      color: var(--navy);
+      font-weight: 900;
+    }
+
+    .match-score {
+      margin-left: auto;
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .match-info {
+      margin-top: 14px;
+      padding: 11px;
+      background: #f7f8fa;
+      border-radius: 12px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .match-info strong {
+      color: var(--navy);
+    }
+
+    .match-card .primary-btn {
+      margin-top: 11px;
+      min-height: 43px;
+    }
+
+    /* =========================================================
+       ACTIVE SHIFT
+    ========================================================= */
+
+    .live-screen {
+      text-align: center;
+      padding: 52px 20px 20px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #eaf8f1;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      50% {
+        opacity: .35;
+      }
+    }
+
+    .timer {
+      margin: 50px 0 13px;
+      color: var(--navy);
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -2px;
+    }
+
+    .live-card {
+      margin-top: 35px;
+      padding: 18px;
+      text-align: left;
+    }
+
+    .live-card .status {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      padding: 10px 0;
+    }
+
+    .live-card .status + .status {
+      border-top: 1px solid var(--border);
+    }
+
+    /* =========================================================
+       PROFILE
+    ========================================================= */
+
+    .profile-head {
+      padding: 51px 20px 22px;
+      text-align: center;
+    }
+
+    .profile-large-avatar {
+      width: 76px;
+      height: 76px;
+      border-radius: 25px;
+      margin: 0 auto 12px;
+      display: grid;
+      place-items: center;
+      background: #fff0e4;
+      color: var(--orange);
+      font-size: 25px;
+      font-weight: 900;
+    }
+
+    .trust {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+      margin-top: 9px;
+      background: #eaf8f1;
+      color: var(--green);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 900;
+    }
+
+    .profile-menu {
+      margin: 0 20px;
+      overflow: hidden;
+    }
+
+    .profile-row {
+      min-height: 58px;
+      padding: 0 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      background: white;
+    }
+
+    .profile-row:last-child {
+      border-bottom: 0;
+    }
+
+    .row-icon {
+      width: 33px;
+      height: 33px;
+      border-radius: 10px;
+      background: #f0f3f7;
+      display: grid;
+      place-items: center;
+      font-size: 15px;
+    }
+
+    .profile-row strong {
+      font-size: 12px;
+    }
+
+    .row-arrow {
+      margin-left: auto;
+      color: #a1a9b6;
+    }
+
+    .language-row {
+      justify-content: space-between;
+    }
+
+    .language-control {
+      display: flex;
+      padding: 3px;
+      background: #f0f2f5;
+      border-radius: 9px;
+    }
+
+    .lang-btn {
+      border: 0;
+      background: transparent;
+      padding: 6px 9px;
+      border-radius: 7px;
+      font-size: 9px;
+      font-weight: 900;
+      color: var(--muted);
+    }
+
+    .lang-btn.active {
+      background: white;
+      color: var(--navy);
+      box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    }
+
+    .logout-wrap {
+      padding: 22px 20px 35px;
+    }
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    .toast {
+      position: absolute;
+      z-index: 9000;
+      left: 20px;
+      right: 20px;
+      bottom: 94px;
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: var(--navy);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: center;
+      transform: translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =========================================================
+       RESPONSIVE DESKTOP
+    ========================================================= */
+
+    @media (max-height: 900px) {
+      .device {
+        transform: scale(.88);
+        transform-origin: center;
+      }
+    }
+
+    @media (max-width: 430px) {
+      body {
+        background: var(--cream);
+      }
+
+      .device {
+        width: 390px;
+        height: 844px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .device::before {
+        top: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="device">
+    <div class="app">
+
+      <!-- =====================================================
+           LOGIN
+      ====================================================== -->
+      <section id="loginScreen" class="screen active">
+        <div class="login-content">
+
+          <div class="brand">
+            <div class="brand-mark">S</div>
+            <div class="brand-name">Shift<span>Mate</span></div>
+          </div>
+
+          <div class="login-hero">
+            <div class="eyebrow" data-i18n="loginEyebrow">
+              F&B WORKFORCE MARKETPLACE
+            </div>
+
+            <h1 data-i18n="loginTitle">
+              Kerja fleksibel.<br>
+              Bisnis lebih siap.
+            </h1>
+
+            <p data-i18n="loginSubtitle">
+              Platform Shift F&B Terpercaya untuk pekerja part-time dan UMKM.
+            </p>
+          </div>
+
+          <div class="login-actions">
+
+            <button
+              class="role-btn primary"
+              onclick="mockLogin('worker')"
+            >
+              <div class="role-icon">👤</div>
+
+              <div class="role-copy">
+                <strong data-i18n="loginWorker">
+                  Masuk sebagai Pekerja
+                </strong>
+
+                <small data-i18n="loginWorkerSub">
+                  Cari shift fleksibel
+                </small>
+              </div>
+            </button>
+
+            <button
+              class="role-btn secondary"
+              onclick="mockLogin('employer')"
+            >
+              <div class="role-icon">🏪</div>
+
+              <div class="role-copy">
+                <strong data-i18n="loginEmployer">
+                  Masuk sebagai Employer
+                </strong>
+
+                <small data-i18n="loginEmployerSub">
+                  Rekrut staf part-time
+                </small>
+              </div>
+            </button>
+
+          </div>
+
+          <div class="login-footer">
+            <span data-i18n="noAccount">
+              Belum punya akun?
+            </span>
+            <span data-i18n="register">
+              Daftar di sini
+            </span>
+          </div>
+
+        </div>
+      </section>
+
+
+      <!-- =====================================================
+           WORKER HOME
+      ====================================================== -->
+      <section id="workerHome" class="screen">
+
+        <div class="scroll">
+
+          <header class="app-header">
+            <div class="brand">
+              <div class="brand-mark">S</div>
+              <div class="brand-name">Shift<span>Mate</span></div>
+            </div>
+
+            <div class="profile-mini" onclick="openProfile('worker')">
+              <div class="avatar">D</div>
+            </div>
+          </header>
+
+          <div class="greeting">
+            <div class="eyebrow" data-i18n="workerEyebrow">
+              PELUANG HARI INI
+            </div>
+
+            <h1 data-i18n="workerGreeting">
+              Selamat pagi, Dinda.
+            </h1>
+
+            <p
+              class="muted"
+              style="margin-top:7px;font-size:13px"
+              data-i18n="workerMatchCount"
+            >
+              3 shift cocok untukmu
+            </p>
+          </div>
+
+          <div class="filter-row">
+            <button class="chip active" onclick="toggleChip(this)">
+              ☷ <span data-i18n="list">List</span>
+            </button>
+
+            <button class="chip" onclick="toggleChip(this)">
+              ⌖ <span data-i18n="map">Map</span>
+            </button>
+
+            <button class="chip" onclick="toggleChip(this)">
+              ✓ <span data-i18n="today">Tersedia hari ini</span>
+            </button>
+
+            <button class="chip" onclick="toggleChip(this)">
+              ◷ <span data-i18n="weekend">Akhir pekan saja</span>
+            </button>
+          </div>
+
+          <div class="section">
+
+            <div class="section-heading">
+              <h2 data-i18n="recommended">Cocok untukmu</h2>
+              <span>3 MATCH</span>
+            </div>
+
+            <div class="shift-list">
+
+              <article class="card shift-card" onclick="openShiftDetail()">
+                <div class="shift-top">
+
+                  <div class="shift-title">
+                    <div class="shift-icon">☕</div>
+
+                    <div>
+                      <div class="shift-name">Barista</div>
+                      <div class="shift-place">Kopi Senja</div>
+                    </div>
+                  </div>
+
+                  <div class="safe-badge">
+                    Dana aman
+                  </div>
+
+                </div>
+
+                <div class="shift-meta">
+                  <span>Hari ini · 16:00</span>
+                  <strong class="pay">Rp 180.000</strong>
+                </div>
+              </article>
+
+
+              <article class="card shift-card">
+                <div class="shift-top">
+
+                  <div class="shift-title">
+                    <div class="shift-icon">🍽</div>
+
+                    <div>
+                      <div class="shift-name">Waiter</div>
+                      <div class="shift-place">Warung Bu Tini</div>
+                    </div>
+                  </div>
+
+                  <div class="safe-badge">
+                    Dana aman
+                  </div>
+
+                </div>
+
+                <div class="shift-meta">
+                  <span>Hari ini · 17:00</span>
+                  <strong class="pay">Rp 150.000</strong>
+                </div>
+              </article>
+
+
+              <article class="card shift-card">
+                <div class="shift-top">
+
+                  <div class="shift-title">
+                    <div class="shift-icon">🍜</div>
+
+                    <div>
+                      <div class="shift-name">Kitchen helper</div>
+                      <div class="shift-place">Bakso 99</div>
+                    </div>
+                  </div>
+
+                  <div class="safe-badge">
+                    Dana aman
+                  </div>
+
+                </div>
+
+                <div class="shift-meta">
+                  <span>Besok · 10:00</span>
+                  <strong class="pay">Rp 160.000</strong>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+        </div>
+
+        <nav class="bottom-nav">
+          <button class="nav-item active">
+            <span>⌕</span>
+            <span data-i18n="navShifts">Shifts</span>
+          </button>
+
+          <button class="nav-item" onclick="toast('Menu Mine')">
+            <span>▣</span>
+            <span data-i18n="navMine">Mine</span>
+          </button>
+
+          <button class="nav-item" onclick="toast('Wallet')">
+            <span>◉</span>
+            <span data-i18n="navWallet">Wallet</span>
+          </button>
+
+          <button class="nav-item" onclick="openProfile('worker')">
+            <span>●</span>
+            <span data-i18n="navProfile">Profile</span>
+          </button>
+        </nav>
+
+      </section>
+
+
+      <!-- =====================================================
+           EMPLOYER HOME
+      ====================================================== -->
+      <section id="employerHome" class="screen">
+
+        <div class="scroll">
+
+          <header class="app-header">
+            <div class="brand">
+              <div class="brand-mark">S</div>
+              <div class="brand-name">Shift<span>Mate</span></div>
+            </div>
+
+            <div
+              class="profile-mini"
+              onclick="openProfile('employer')"
+            >
+              <div class="avatar orange">K</div>
+            </div>
+          </header>
+
+          <div class="greeting">
+
+            <div class="eyebrow" data-i18n="employerEyebrow">
+              DASHBOARD UMKM
+            </div>
+
+            <h1 data-i18n="employerGreeting">
+              Halo, Kopi Senja.
+            </h1>
+
+            <p
+              class="muted"
+              style="margin-top:7px;font-size:13px"
+              data-i18n="employerShiftCount"
+            >
+              4 shift aktif minggu ini
+            </p>
+
+          </div>
+
+          <div class="section">
+
+            <div class="section-heading">
+              <h2 data-i18n="quickActions">
+                Aksi cepat
+              </h2>
+            </div>
+
+            <div class="action-grid">
+
+              <button
+                class="quick-action primary"
+                onclick="openPostShift()"
+              >
+                <div class="quick-icon">＋</div>
+                <strong data-i18n="postShift">
+                  Pasang Shift Baru
+                </strong>
+                <small data-i18n="postShiftSub">
+                  Cari bantuan
+                </small>
+              </button>
+
+              <button
+                class="quick-action secondary"
+                onclick="openMatching()"
+              >
+                <div class="quick-icon">♧</div>
+                <strong data-i18n="matching">
+                  Lihat Kandidat Cocok
+                </strong>
+                <small data-i18n="matchingSub">
+                  2 kandidat
+                </small>
+              </button>
+
+            </div>
+          </div>
+
+          <div class="section">
+
+            <div class="section-heading">
+              <h2 data-i18n="activeShifts">
+                Shift aktif
+              </h2>
+
+              <span data-i18n="thisWeek">
+                Minggu ini
+              </span>
+            </div>
+
+            <div class="card active-shift">
+
+              <div class="active-row">
+                <div>
+                  <strong style="font-size:13px">Barista</strong>
+                  <div class="muted" style="font-size:10px;margin-top:4px">
+                    Kopi Senja
+                  </div>
+                </div>
+
+                <div style="text-align:right">
+                  <div class="day-pill">Sabtu</div>
+                  <div
+                    class="muted"
+                    style="font-size:9px;margin-top:5px"
+                    data-i18n="twoStaff"
+                  >
+                    2 staf dibutuhkan
+                  </div>
+                </div>
+              </div>
+
+              <div class="active-row">
+                <div>
+                  <strong style="font-size:13px">Waiter</strong>
+                  <div class="muted" style="font-size:10px;margin-top:4px">
+                    Kopi Senja
+                  </div>
+                </div>
+
+                <div style="text-align:right">
+                  <div class="day-pill">Minggu</div>
+                  <div
+                    class="muted"
+                    style="font-size:9px;margin-top:5px"
+                    data-i18n="oneStaff"
+                  >
+                    1 staf dibutuhkan
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <nav class="bottom-nav">
+
+          <button class="nav-item active">
+            <span>⌂</span>
+            <span data-i18n="navToday">Today</span>
+          </button>
+
+          <button
+            class="nav-item"
+            onclick="openMatching()"
+          >
+            <span>♧</span>
+            <span data-i18n="navHire">Hire</span>
+          </button>
+
+          <button
+            class="nav-item"
+            onclick="toast('Wallet')"
+          >
+            <span>◉</span>
+            <span data-i18n="navWallet">Wallet</span>
+          </button>
+
+          <button
+            class="nav-item"
+            onclick="openProfile('employer')"
+          >
+            <span>●</span>
+            <span data-i18n="navTeam">Team</span>
+          </button>
+
+        </nav>
+
+      </section>
+
+
+      <!-- =====================================================
+           WORKER SHIFT DETAIL
+      ====================================================== -->
+      <section id="shiftDetail" class="screen">
+
+        <div class="scroll">
+
+          <div class="detail-header">
+            <button class="back-btn" onclick="showScreen('workerHome')">
+              ‹
+            </button>
+
+            <strong data-i18n="shiftDetail">
+              Detail Shift
+            </strong>
+          </div>
+
+          <div class="detail-title">
+
+            <div class="shift-icon">☕</div>
+
+            <h1>Barista · Kopi Senja</h1>
+
+            <p data-i18n="youEarn">
+              Kamu mendapatkan
+            </p>
+
+            <div class="detail-earn">
+              <small data-i18n="earnAmount">
+                Pendapatan shift
+              </small>
+              <strong>Rp 180.000</strong>
+            </div>
+
+          </div>
+
+          <div class="escrow">
+
+            <div class="escrow-title">
+              SecurePay Escrow
+            </div>
+
+            <div class="escrow-flow">
+
+              <div class="flow-step">
+                <div class="flow-dot">🔒</div>
+                UMKM
+              </div>
+
+              <span>→</span>
+
+              <div class="flow-step">
+                <div class="flow-dot">👤</div>
+                Kerja
+              </div>
+
+              <span>→</span>
+
+              <div class="flow-step">
+                <div class="flow-dot">✓</div>
+                Cair
+              </div>
+
+            </div>
+
+            <p data-i18n="escrowText">
+              Dana UMKM dikunci → Kamu kerja → Langsung cair.
+              Rp 180.000 sudah dikunci.
+            </p>
+
+          </div>
+
+          <div class="section">
+            <div class="card" style="padding:16px">
+
+              <div class="eyebrow" data-i18n="shiftInfo">
+                INFORMASI SHIFT
+              </div>
+
+              <div style="margin-top:12px;display:grid;gap:11px">
+
+                <div style="display:flex;justify-content:space-between;font-size:11px">
+                  <span class="muted" data-i18n="schedule">Jadwal</span>
+                  <strong>Hari ini · 16:00–21:00</strong>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;font-size:11px">
+                  <span class="muted" data-i18n="location">Lokasi</span>
+                  <strong>Jl. Senja No. 12</strong>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;font-size:11px">
+                  <span class="muted" data-i18n="role">Posisi</span>
+                  <strong>Barista</strong>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="sticky-cta">
+          <button
+            class="primary-btn"
+            onclick="applyShift()"
+            data-i18n="apply"
+          >
+            Lamar shift ini
+          </button>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           EMPLOYER MATCHING
+      ====================================================== -->
+      <section id="matchingScreen" class="screen">
+
+        <div class="scroll">
+
+          <div class="detail-header">
+            <button class="back-btn" onclick="showScreen('employerHome')">
+              ‹
+            </button>
+
+            <strong data-i18n="matchingTitle">
+              Kandidat
+            </strong>
+          </div>
+
+          <div class="matching-header">
+
+            <div class="eyebrow" data-i18n="matchEyebrow">
+              SMART MATCHING
+            </div>
+
+            <h1 style="margin-top:8px">
+              2 kecocokan untuk<br>
+              Shift Barista
+            </h1>
+
+            <p
+              class="muted"
+              style="margin-top:8px;font-size:12px"
+              data-i18n="matchingDescription"
+            >
+              Berdasarkan skill, jadwal, dan reliability.
+            </p>
+
+          </div>
+
+          <article class="card match-card">
+
+            <div class="match-top">
+
+              <div class="match-avatar">
+                RP
+              </div>
+
+              <div>
+                <strong style="font-size:14px">
+                  Rafi Pratama
+                </strong>
+
+                <div
+                  class="muted"
+                  style="font-size:10px;margin-top:4px"
+                  data-i18n="baristaExperience"
+                >
+                  Barista · 24 shift selesai
+                </div>
+              </div>
+
+              <div class="match-score">
+                98% on-time
+              </div>
+
+            </div>
+
+            <div class="match-info">
+              <strong>ROI</strong>
+              ·
+              <span data-i18n="recruitCost">
+                Biaya rekrutmen:
+              </span>
+              <strong>Rp 15k</strong>
+            </div>
+
+            <button
+              class="primary-btn"
+              onclick="recruit('Rafi Pratama')"
+              data-i18n="recruit"
+            >
+              Rekrut
+            </button>
+
+          </article>
+
+
+          <article class="card match-card">
+
+            <div class="match-top">
+
+              <div class="match-avatar">
+                AS
+              </div>
+
+              <div>
+                <strong style="font-size:14px">
+                  Alya Sari
+                </strong>
+
+                <div
+                  class="muted"
+                  style="font-size:10px;margin-top:4px"
+                  data-i18n="baristaExperience2"
+                >
+                  Barista · 18 shift selesai
+                </div>
+              </div>
+
+              <div class="match-score">
+                96% on-time
+              </div>
+
+            </div>
+
+            <div class="match-info">
+              <strong>ROI</strong>
+              ·
+              <span data-i18n="recruitCost">
+                Biaya rekrutmen:
+              </span>
+              <strong>Rp 15k</strong>
+            </div>
+
+            <button
+              class="primary-btn"
+              onclick="recruit('Alya Sari')"
+              data-i18n="recruit"
+            >
+              Rekrut
+            </button>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           ACTIVE SHIFT WORKER
+      ====================================================== -->
+      <section id="workerActive" class="screen">
+
+        <div class="scroll">
+
+          <div class="live-screen">
+
+            <div class="live-badge">
+              <span class="live-dot"></span>
+              LIVE
+            </div>
+
+            <div
+              class="eyebrow"
+              style="margin-top:20px"
+              data-i18n="workerLive"
+            >
+              SHIFT SEDANG BERJALAN
+            </div>
+
+            <h1 style="margin-top:8px">
+              Barista · Kopi Senja
+            </h1>
+
+            <div class="timer" id="workerTimer">
+              02:14:08
+            </div>
+
+            <p
+              class="muted"
+              style="font-size:12px"
+              data-i18n="workerLiveText"
+            >
+              Shift dimulai. Dana dikunci menunggumu.
+            </p>
+
+            <div class="card live-card">
+
+              <div class="status">
+                <span data-i18n="statusShift">Status shift</span>
+                <strong style="color:var(--green)" data-i18n="running">
+                  Berjalan
+                </strong>
+              </div>
+
+              <div class="status">
+                <span data-i18n="escrowStatus">SecurePay</span>
+                <strong>Rp 180.000 locked</strong>
+              </div>
+
+              <div class="status">
+                <span data-i18n="location">Lokasi</span>
+                <strong>Kopi Senja</strong>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           ACTIVE SHIFT EMPLOYER
+      ====================================================== -->
+      <section id="employerActive" class="screen">
+
+        <div class="scroll">
+
+          <div class="live-screen">
+
+            <div class="live-badge">
+              <span class="live-dot"></span>
+              LIVE
+            </div>
+
+            <div
+              class="eyebrow"
+              style="margin-top:20px"
+              data-i18n="employerLive"
+            >
+              MONITORING SHIFT
+            </div>
+
+            <h1 style="margin-top:8px">
+              Barista · Kopi Senja
+            </h1>
+
+            <div
+              style="margin:48px 0 13px;font-size:54px"
+            >
+              ✓
+            </div>
+
+            <h2 data-i18n="staffOnSite">
+              Staf di tempat.
+            </h2>
+
+            <p
+              class="muted"
+              style="font-size:12px;margin-top:8px"
+              data-i18n="employerLiveText"
+            >
+              Rafi sudah check-in dan shift berjalan.
+            </p>
+
+            <div class="card live-card">
+
+              <div class="status">
+                <span>Rafi Pratama</span>
+                <strong style="color:var(--green)">
+                  Checked in
+                </strong>
+              </div>
+
+              <div class="status">
+                <span data-i18n="shiftPay">
+                  Gaji shift
+                </span>
+                <strong>
+                  Rp 180.000
+                </strong>
+              </div>
+
+              <div class="status">
+                <span data-i18n="escrowStatus">
+                  SecurePay
+                </span>
+                <strong>
+                  Locked
+                </strong>
+              </div>
+
+            </div>
+
+            <button
+              class="primary-btn"
+              style="margin-top:20px"
+              onclick="finishShift()"
+              data-i18n="finishShift"
+            >
+              Akhiri shift & cairkan gaji
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           PROFILE
+      ====================================================== -->
+      <section id="profileScreen" class="screen">
+
+        <div class="scroll">
+
+          <div class="profile-head">
+
+            <div
+              class="profile-large-avatar"
+              id="profileAvatar"
+            >
+              D
+            </div>
+
+            <h2 id="profileName">
+              Dinda
+            </h2>
+
+            <p
+              class="muted"
+              style="font-size:11px;margin-top:5px"
+              id="profileRole"
+            >
+              Worker
+            </p>
+
+            <div class="trust">
+              ✓
+              <span data-i18n="trustScore">
+                Trust Score 96
+              </span>
+            </div>
+
+          </div>
+
+          <div class="card profile-menu">
+
+            <div class="profile-row">
+              <div class="row-icon">✎</div>
+              <strong data-i18n="editProfile">
+                Edit Profile
+              </strong>
+              <span class="row-arrow">›</span>
+            </div>
+
+            <div class="profile-row">
+              <div class="row-icon">◉</div>
+              <strong data-i18n="payments">
+                Pembayaran
+              </strong>
+              <span class="row-arrow">›</span>
+            </div>
+
+            <div class="profile-row">
+              <div class="row-icon">♢</div>
+              <strong data-i18n="notifications">
+                Notifikasi
+              </strong>
+              <span class="row-arrow">›</span>
+            </div>
+
+            <div class="profile-row language-row">
+
+              <div style="display:flex;align-items:center;gap:12px">
+                <div class="row-icon">文</div>
+
+                <strong data-i18n="language">
+                  Bahasa
+                </strong>
+              </div>
+
+              <div class="language-control">
+
+                <button
+                  class="lang-btn active"
+                  id="idLang"
+                  onclick="setLanguage('id')"
+                >
+                  ID
+                </button>
+
+                <button
+                  class="lang-btn"
+                  id="enLang"
+                  onclick="setLanguage('en')"
+                >
+                  EN
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="logout-wrap">
+
+            <button
+              class="danger-btn"
+              onclick="logout()"
+              data-i18n="logout"
+            >
+              Keluar
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           POST SHIFT BOTTOM SHEET
+      ====================================================== -->
+
+      <div
+        class="sheet-backdrop"
+        id="sheetBackdrop"
+        onclick="closePostShift()"
+      ></div>
+
+      <div
+        class="bottom-sheet"
+        id="postShiftSheet"
+      >
+
+        <div class="sheet-handle"></div>
+
+        <div class="sheet-header">
+          <div>
+            <div
+              class="eyebrow"
+              data-i18n="newShift"
+            >
+              SHIFT BARU
+            </div>
+
+            <h2
+              style="margin-top:5px"
+              data-i18n="postNewShift"
+            >
+              Pasang Shift Baru
+            </h2>
+          </div>
+
+          <button
+            class="sheet-close"
+            onclick="closePostShift()"
+          >
+            ×
+          </button>
+        </div>
+
+
+        <div class="form-section">
+
+          <label data-i18n="whenHelp">
+            1. Kapan butuh bantuan?
+          </label>
+
+          <div class="smart-suggestion">
+            ✨
+            <span data-i18n="smartSuggestion">
+              Biasanya butuh 2 staf ekstra hari Sabtu.
+            </span>
+          </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+          <label data-i18n="whoNeeded">
+            2. Siapa yang dibutuhkan?
+          </label>
+
+          <div class="option-row">
+
+            <button
+              class="option selected"
+              onclick="selectOption(this)"
+            >
+              ☕ Barista
+            </button>
+
+            <button
+              class="option"
+              onclick="selectOption(this)"
+            >
+              🍽 Waiter
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+          <label data-i18n="staffAmount">
+            Jumlah staf
+          </label>
+
+          <div class="counter">
+
+            <button onclick="changeStaff(-1)">
+              −
+            </button>
+
+            <strong id="staffCount">
+              2
+            </strong>
+
+            <button onclick="changeStaff(1)">
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-section">
+
+          <label data-i18n="budgetEscrow">
+            3. Budget & escrow
+          </label>
+
+          <div class="budget">
+
+            <div class="budget-line">
+              <span id="budgetFormula">
+                2 staf × 5 jam × Rp 30k
+              </span>
+
+              <span id="budgetValue">
+                Rp 300.000
+              </span>
+            </div>
+
+            <div class="budget-total">
+              <span data-i18n="totalLocked">
+                Total dikunci
+              </span>
+
+              <span id="budgetTotal">
+                Rp 300.000
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <button
+          class="primary-btn"
+          onclick="confirmPostShift()"
+          data-i18n="confirmEscrow"
+        >
+          Konfirmasi & Kunci Dana
+        </button>
+
+      </div>
+
+
+      <!-- =====================================================
+           LOADING
+      ====================================================== -->
+
+      <div
+        class="loading-overlay"
+        id="loadingOverlay"
+      >
+        <div class="loader-box">
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+
+      <!-- =====================================================
+           TOAST
+      ====================================================== -->
+
+      <div
+        class="toast"
+        id="toast"
+      ></div>
+
+    </div>
+  </main>
+
+
+<script>
+/* ============================================================
+   STATE
+============================================================ */
+
+const state = {
+  role: null,
+  language: "id",
+  currentScreen: "loginScreen",
+  staffCount: 2,
+  timerSeconds: 2 * 3600 + 14 * 60 + 8
+};
+
+
+/* ============================================================
+   TRANSLATIONS
+============================================================ */
+
+const translations = {
+
+  id: {
+
+    loginEyebrow: "F&B WORKFORCE MARKETPLACE",
+    loginTitle: "Kerja fleksibel.<br>Bisnis lebih siap.",
+    loginSubtitle: "Platform Shift F&B Terpercaya untuk pekerja part-time dan UMKM.",
+
+    loginWorker: "Masuk sebagai Pekerja",
+    loginWorkerSub: "Cari shift fleksibel",
+
+    loginEmployer: "Masuk sebagai Employer",
+    loginEmployerSub: "Rekrut staf part-time",
+
+    noAccount: "Belum punya akun?",
+    register: "Daftar di sini",
+
+    workerEyebrow: "PELUANG HARI INI",
+    workerGreeting: "Selamat pagi, Dinda.",
+    workerMatchCount: "3 shift cocok untukmu",
+
+    list: "List",
+    map: "Map",
+    today: "Tersedia hari ini",
+    weekend: "Akhir pekan saja",
+
+    recommended: "Cocok untukmu",
+
+    navShifts: "Shifts",
+    navMine: "Mine",
+    navWallet: "Wallet",
+    navProfile: "Profile",
+
+    employerEyebrow: "DASHBOARD UMKM",
+    employerGreeting: "Halo, Kopi Senja.",
+    employerShiftCount: "4 shift aktif minggu ini",
+
+    quickActions: "Aksi cepat",
+    postShift: "Pasang Shift Baru",
+    postShiftSub: "Cari bantuan",
+    matching: "Lihat Kandidat Cocok",
+    matchingSub: "2 kandidat",
+
+    activeShifts: "Shift aktif",
+    thisWeek: "Minggu ini",
+    twoStaff: "2 staf dibutuhkan",
+    oneStaff: "1 staf dibutuhkan",
+
+    navToday: "Today",
+    navHire: "Hire",
+    navTeam: "Team",
+
+    shiftDetail: "Detail Shift",
+    youEarn: "Kamu mendapatkan",
+    earnAmount: "Pendapatan shift",
+    escrowText: "Dana UMKM dikunci → Kamu kerja → Langsung cair. Rp 180.000 sudah dikunci.",
+    shiftInfo: "INFORMASI SHIFT",
+    schedule: "Jadwal",
+    location: "Lokasi",
+    role: "Posisi",
+    apply: "Lamar shift ini",
+
+    matchingTitle: "Kandidat",
+    matchEyebrow: "SMART MATCHING",
+    matchingDescription: "Berdasarkan skill, jadwal, dan reliability.",
+    baristaExperience: "Barista · 24 shift selesai",
+    baristaExperience2: "Barista · 18 shift selesai",
+    recruitCost: "Biaya rekrutmen:",
+    recruit: "Rekrut",
+
+    workerLive: "SHIFT SEDANG BERJALAN",
+    workerLiveText: "Shift dimulai. Dana dikunci menunggumu.",
+    statusShift: "Status shift",
+    running: "Berjalan",
+    escrowStatus: "SecurePay",
+
+    employerLive: "MONITORING SHIFT",
+    staffOnSite: "Staf di tempat.",
+    employerLiveText: "Rafi sudah check-in dan shift berjalan.",
+    shiftPay: "Gaji shift",
+    finishShift: "Akhiri shift & cairkan gaji",
+
+    trustScore: "Trust Score 96",
+    editProfile: "Edit Profile",
+    payments: "Pembayaran",
+    notifications: "Notifikasi",
+    language: "Bahasa",
+    logout: "Keluar",
+
+    newShift: "SHIFT BARU",
+    postNewShift: "Pasang Shift Baru",
+    whenHelp: "1. Kapan butuh bantuan?",
+    smartSuggestion: "Biasanya butuh 2 staf ekstra hari Sabtu.",
+    whoNeeded: "2. Siapa yang dibutuhkan?",
+    staffAmount: "Jumlah staf",
+    budgetEscrow: "3. Budget & escrow",
+    totalLocked: "Total dikunci",
+    confirmEscrow: "Konfirmasi & Kunci Dana"
+  },
+
+
+  en: {
+
+    loginEyebrow: "F&B WORKFORCE MARKETPLACE",
+    loginTitle: "Flexible work.<br>A business that's ready.",
+    loginSubtitle: "Trusted F&B shift platform for part-time workers and small businesses.",
+
+    loginWorker: "Login as Worker",
+    loginWorkerSub: "Find flexible shifts",
+
+    loginEmployer: "Login as Employer",
+    loginEmployerSub: "Hire part-time staff",
+
+    noAccount: "Don't have an account?",
+    register: "Register here",
+
+    workerEyebrow: "TODAY'S OPPORTUNITIES",
+    workerGreeting: "Good morning, Dinda.",
+    workerMatchCount: "3 shifts match you",
+
+    list: "List",
+    map: "Map",
+    today: "Available today",
+    weekend: "Weekends only",
+
+    recommended: "Recommended for you",
+
+    navShifts: "Shifts",
+    navMine: "Mine",
+    navWallet: "Wallet",
+    navProfile: "Profile",
+
+    employerEyebrow: "BUSINESS DASHBOARD",
+    employerGreeting: "Hello, Kopi Senja.",
+    employerShiftCount: "4 active shifts this week",
+
+    quickActions: "Quick actions",
+    postShift: "Post New Shift",
+    postShiftSub: "Find help",
+    matching: "View Matching Candidates",
+    matchingSub: "2 candidates",
+
+    activeShifts: "Active shifts",
+    thisWeek: "This week",
+    twoStaff: "2 staff needed",
+    oneStaff: "1 staff needed",
+
+    navToday: "Today",
+    navHire: "Hire",
+    navTeam: "Team",
+
+    shiftDetail: "Shift Detail",
+    youEarn: "You earn",
+    earnAmount: "Shift earnings",
+    escrowText: "Business funds are locked → You work → Payment is released. Rp 180,000 is secured.",
+    shiftInfo: "SHIFT INFORMATION",
+    schedule: "Schedule",
+    location: "Location",
+    role: "Position",
+    apply: "Apply for this shift",
+
+    matchingTitle: "Candidates",
+    matchEyebrow: "SMART MATCHING",
+    matchingDescription: "Based on skills, schedule, and reliability.",
+    baristaExperience: "Barista · 24 shifts completed",
+    baristaExperience2: "Barista · 18 shifts completed",
+    recruitCost: "Recruitment cost:",
+    recruit: "Hire",
+
+    workerLive: "SHIFT IN PROGRESS",
+    workerLiveText: "Shift started. Your secured funds are waiting.",
+    statusShift: "Shift status",
+    running: "Running",
+    escrowStatus: "SecurePay",
+
+    employerLive: "SHIFT MONITORING",
+    staffOnSite: "Staff is on-site.",
+    employerLiveText: "Rafi has checked in and the shift is running.",
+    shiftPay: "Shift pay",
+    finishShift: "End shift & release pay",
+
+    trustScore: "Trust Score 96",
+    editProfile: "Edit Profile",
+    payments: "Payment Methods",
+    notifications: "Notifications",
+    language: "Language",
+    logout: "Log Out",
+
+    newShift: "NEW SHIFT",
+    postNewShift: "Post New Shift",
+    whenHelp: "1. When do you need help?",
+    smartSuggestion: "You usually need 2 extra staff on Saturday.",
+    whoNeeded: "2. Who do you need?",
+    staffAmount: "Number of staff",
+    budgetEscrow: "3. Budget & escrow",
+    totalLocked: "Total locked",
+    confirmEscrow: "Confirm & Lock Funds"
+  }
+
+};
+
+
+/* ============================================================
+   SCREEN NAVIGATION
+============================================================ */
+
+function showScreen(id) {
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  const target = document.getElementById(id);
+
+  if (!target) return;
+
+  target.classList.add("active");
+
+  state.currentScreen = id;
+
+  document.querySelectorAll(".scroll").forEach(scroll => {
+    scroll.scrollTop = 0;
+  });
+}
+
+
+/* ============================================================
+   MOCK LOGIN
+============================================================ */
+
+function mockLogin(role) {
+
+  const overlay = document.getElementById("loadingOverlay");
+
+  overlay.classList.add("show");
+
+  setTimeout(() => {
+
+    state.role = role;
+
+    overlay.classList.remove("show");
+
+    if (role === "worker") {
+      showScreen("workerHome");
+    } else {
+      showScreen("employerHome");
+    }
+
+  }, 1000);
+}
+
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+function logout() {
+
+  state.role = null;
+
+  showScreen("loginScreen");
+
+  toast(
+    state.language === "id"
+      ? "Kamu telah keluar."
+      : "You have been logged out."
+  );
+}
+
+
+/* ============================================================
+   PROFILE
+============================================================ */
+
+function openProfile(role) {
+
+  state.role = role;
+
+  const avatar = document.getElementById("profileAvatar");
+  const name = document.getElementById("profileName");
+  const roleLabel = document.getElementById("profileRole");
+
+  if (role === "worker") {
+
+    avatar.textContent = "D";
+    name.textContent = "Dinda";
+    roleLabel.textContent =
+      state.language === "id"
+        ? "Worker"
+        : "Worker";
+
+  } else {
+
+    avatar.textContent = "K";
+    name.textContent = "Admin Kopi Senja";
+    roleLabel.textContent =
+      state.language === "id"
+        ? "Employer / UMKM"
+        : "Employer / Business";
+
+  }
+
+  showScreen("profileScreen");
+}
+
+
+/* ============================================================
+   LANGUAGE
+============================================================ */
+
+function setLanguage(language) {
+
+  state.language = language;
+
+  const dictionary = translations[language];
+
+  document.querySelectorAll("[data-i18n]").forEach(element => {
+
+    const key = element.dataset.i18n;
+
+    if (dictionary[key]) {
+      element.innerHTML = dictionary[key];
+    }
+
+  });
+
+  document.getElementById("idLang").classList.toggle(
+    "active",
+    language === "id"
+  );
+
+  document.getElementById("enLang").classList.toggle(
+    "active",
+    language === "en"
+  );
+
+  updateBudget();
+}
+
+
+/* ============================================================
+   SHIFT DETAIL
+============================================================ */
+
+function openShiftDetail() {
+
+  if (state.role !== "worker") return;
+
+  showScreen("shiftDetail");
+}
+
+
+function applyShift() {
+
+  showScreen("workerActive");
+
+  startTimer();
+
+  toast(
+    state.language === "id"
+      ? "Lamaran diterima. Shift aktif."
+      : "Application accepted. Shift is active."
+  );
+}
+
+
+/* ============================================================
+   POST SHIFT
+============================================================ */
+
+function openPostShift() {
+
+  const backdrop =
+    document.getElementById("sheetBackdrop");
+
+  const sheet =
+    document.getElementById("postShiftSheet");
+
+  backdrop.classList.add("show");
+  sheet.classList.add("show");
+}
+
+
+function closePostShift() {
+
+  const backdrop =
+    document.getElementById("sheetBackdrop");
+
+  const sheet =
+    document.getElementById("postShiftSheet");
+
+  backdrop.classList.remove("show");
+  sheet.classList.remove("show");
+}
+
+
+function selectOption(button) {
+
+  button
+    .parentElement
+    .querySelectorAll(".option")
+    .forEach(option => {
+      option.classList.remove("selected");
+    });
+
+  button.classList.add("selected");
+}
+
+
+function changeStaff(delta) {
+
+  state.staffCount += delta;
+
+  if (state.staffCount < 1) {
+    state.staffCount = 1;
+  }
+
+  if (state.staffCount > 8) {
+    state.staffCount = 8;
+  }
+
+  document.getElementById("staffCount").textContent =
+    state.staffCount;
+
+  updateBudget();
+}
+
+
+function updateBudget() {
+
+  const total =
+    state.staffCount * 5 * 30000;
+
+  const formatted =
+    new Intl.NumberFormat("id-ID").format(total);
+
+  document.getElementById("budgetFormula").textContent =
+    state.language === "id"
+      ? `${state.staffCount} staf × 5 jam × Rp 30k`
+      : `${state.staffCount} staff × 5 hours × Rp 30k`;
+
+  document.getElementById("budgetValue").textContent =
+    `Rp ${formatted}`;
+
+  document.getElementById("budgetTotal").textContent =
+    `Rp ${formatted}`;
+}
+
+
+function confirmPostShift() {
+
+  closePostShift();
+
+  toast(
+    state.language === "id"
+      ? "Shift berhasil dipasang dan dana dikunci."
+      : "Shift posted and funds secured."
+  );
+
+  setTimeout(() => {
+    openMatching();
+  }, 650);
+}
+
+
+/* ============================================================
+   MATCHING
+============================================================ */
+
+function openMatching() {
+
+  closePostShift();
+
+  showScreen("matchingScreen");
+}
+
+
+function recruit(name) {
+
+  toast(
+    state.language === "id"
+      ? `${name} berhasil direkrut.`
+      : `${name} has been hired.`
+  );
+
+  setTimeout(() => {
+
+    if (state.role === "employer") {
+      showScreen("employerActive");
+    }
+
+  }, 650);
+}
+
+
+/* ============================================================
+   ACTIVE SHIFT
+============================================================ */
+
+let timerInterval = null;
+
+function startTimer() {
+
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
+
+  timerInterval = setInterval(() => {
+
+    state.timerSeconds++;
+
+    const hours =
+      Math.floor(state.timerSeconds / 3600);
+
+    const minutes =
+      Math.floor(
+        (state.timerSeconds % 3600) / 60
+      );
+
+    const seconds =
+      state.timerSeconds % 60;
+
+    const timer =
+      document.getElementById("workerTimer");
+
+    if (timer) {
+
+      timer.textContent =
+        [
+          hours,
+          minutes,
+          seconds
+        ]
+        .map(value =>
+          String(value).padStart(2, "0")
+        )
+        .join(":");
+
+    }
+
+  }, 1000);
+}
+
+
+function finishShift() {
+
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+
+  toast(
+    state.language === "id"
+      ? "Shift selesai. Gaji dicairkan."
+      : "Shift completed. Payment released."
+  );
+
+  setTimeout(() => {
+
+    showScreen("employerHome");
+
+  }, 700);
+}
+
+
+/* ============================================================
+   FILTER CHIPS
+============================================================ */
+
+function toggleChip(button) {
+
+  const row = button.parentElement;
+
+  if (
+    button.textContent.includes("List") ||
+    button.textContent.includes("Map")
+  ) {
+
+    row.querySelectorAll(".chip").forEach(chip => {
+      if (
+        chip.textContent.includes("List") ||
+        chip.textContent.includes("Map")
+      ) {
+        chip.classList.remove("active");
+      }
+    });
+
+    button.classList.add("active");
+
+    return;
+  }
+
+  button.classList.toggle("active");
+}
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+let toastTimer = null;
+
+function toast(message) {
+
+  const element =
+    document.getElementById("toast");
+
+  element.textContent = message;
+  element.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
+    element.classList.remove("show");
+  }, 2200);
+}
+
+
+/* ============================================================
+   INITIALIZATION
+============================================================ */
+
+setLanguage("id");
+updateBudget();
+
+</script>
+
+</body>
+</html>
