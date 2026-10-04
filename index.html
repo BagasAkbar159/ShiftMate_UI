@@ -566,11 +566,11 @@
                 <input type="password" class="input-field" placeholder="••••••••">
                 <label class="label">Konfirmasi Password</label>
                 <input type="password" class="input-field" placeholder="••••••••">
-                <button class="btn-primary" onclick="showScreen('umkm-dashboard)">Daftar</button>
+                <button class="btn-primary" onclick="showScreen('umkm-dashboard')">Daftar</button>
             </div>
         </div>
 
-        <!-- Register Pekerja -->
+        <!-- Register Pekerja -->   
         <div id="register-pekerja" class="screen">
             <div class="header">
                 <button class="back-btn" onclick="showScreen('login-pekerja')">←</button>
@@ -601,8 +601,9 @@
             </div>
             <div class="content">
                 <div class="stat-card">
-                    <div class="stat-label">Saldo Escrow</div>
+                    <div class="stat-label">Dana Sedang Ditahan</div>
                     <div class="stat-value">Rp 2.500.000</div>
+                    <div style="font-size: 12px; opacity: 0.8; margin-top: 8px;">Untuk 5 pekerja aktif • Cair otomatis saat selesai</div>
                 </div>
                 <div class="grid-2">
                     <div class="card">
@@ -633,6 +634,14 @@
                     <button class="btn-secondary" onclick="showScreen('umkm-applications')" style="padding: 20px;">
                         <div style="font-size: 24px;">📋</div>
                         <div style="font-size: 12px; margin-top: 4px;">Lihat Lamaran</div>
+                    </button>
+                    <button class="btn-outline" onclick="showScreen('umkm-smart-matching')" style="padding: 20px; background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: 2px solid #2563EB;">
+                        <div style="font-size: 24px;">🤖</div>
+                        <div style="font-size: 12px; margin-top: 4px; color: #2563EB; font-weight: 700;">AI Matching</div>
+                    </button>
+                    <button class="btn-secondary" onclick="showScreen('umkm-all-activities')" style="padding: 20px;">
+                        <div style="font-size: 24px;">📊</div>
+                        <div style="font-size: 12px; margin-top: 4px;">Aktivitas</div>
                     </button>
                 </div>
                 <div class="section-header">
@@ -930,6 +939,7 @@
                     <div style="color: #6b7280; margin-top: 8px;">Membuat kopi dan minuman, melayani pelanggan dengan ramah, menjaga kebersihan area kerja</div>
                 </div>
                 <button class="btn-primary" onclick="showScreen('umkm-vacancy-edit')">Edit Lowongan</button>
+                <button class="btn-outline" onclick="showScreen('umkm-smart-matching')" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: 2px solid #2563EB; color: #2563EB;">🤖 Lihat Kandidat AI</button>
                 <button class="btn-outline" onclick="showScreen('umkm-vacancy-promote')">🚀 Promosikan</button>
                 <button class="btn-secondary" onclick="showScreen('umkm-vacancy-list')">Tutup Lowongan</button>
             </div>
@@ -1131,11 +1141,11 @@
                         <span style="font-weight: 600;">Harian</span>
                     </div>
                 </div>
-                <div class="card" style="background: #fef3c7; border: 2px solid #f59e0b;">
-                    <div style="font-weight: 600; margin-bottom: 8px;">⚠️ Perhatian</div>
-                    <div style="font-size: 14px; color: #92400e;">Dengan memilih kandidat, Anda setuju untuk membayar upah yang telah disepakati ke escrow.</div>
+                <div class="card" style="background: #dbeafe; border: 2px solid #2563EB;">
+                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 8px;">💳 Langkah Selanjutnya: Pembayaran</div>
+                    <div style="font-size: 14px; color: #1e40af;">Setelah konfirmasi, Anda akan diarahkan untuk membayar langsung ke escrow. Dana ditahan hingga pekerjaan selesai, lalu cair otomatis ke pekerja.</div>
                 </div>
-                <button class="btn-primary" onclick="showScreen('umkm-applications')">Konfirmasi Pilihan</button>
+                <button class="btn-primary" onclick="showScreen('umkm-payment-detail')">Konfirmasi & Lanjut Bayar →</button>
             </div>
         </div>
 
@@ -1146,6 +1156,16 @@
                 <div class="header-title">Lamaran Masuk</div>
             </div>
             <div class="content">
+                <div class="card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); border: 2px solid #2563EB; cursor: pointer;" onclick="showScreen('umkm-smart-matching')">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="font-size: 32px;">🤖</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; color: #2563EB; margin-bottom: 4px;">Rekomendasi AI</div>
+                            <div style="font-size: 14px; color: #1e40af;">Temukan kandidat terbaik dengan Smart Matching</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #2563EB;"></i>
+                    </div>
+                </div>
                 <div class="card" onclick="showScreen('umkm-application-detail')">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
                         <div>
@@ -1570,18 +1590,93 @@
             </div>
         </div>
 
+        <!-- UMKM Active Workers (Pilih Pekerja untuk Dibayar) -->
+        <div id="umkm-active-workers" class="screen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('umkm-payment-history')">←</button>
+                <div class="header-title">Pilih Pekerja untuk Dibayar</div>
+            </div>
+            <div class="content">
+                <div class="card" style="background: #dbeafe; border: 2px solid #2563EB;">
+                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">💡 Cara Kerja</div>
+                    <div style="font-size: 14px; color: #1e40af;">Pilih pekerja aktif di bawah. Pembayaran dilakukan langsung ke escrow per transaksi — bukan top-up saldo.</div>
+                </div>
+                <div class="section-header">
+                    <div class="section-title">Pekerja Aktif (5)</div>
+                </div>
+                <div class="card" onclick="showScreen('umkm-payment-detail')" style="cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">👤</div>
+                            <div>
+                                <div style="font-weight: 700;">Siti Aminah</div>
+                                <div style="font-size: 13px; color: #6b7280;">Barista • Rp 100.000/hari</div>
+                                <div style="font-size: 13px; color: #6b7280;">Shift: Sen-Jum, 08:00–17:00</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="badge badge-warning">Belum Dibayar</span>
+                            <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">30 hari</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" onclick="showScreen('umkm-payment-detail')" style="cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">👤</div>
+                            <div>
+                                <div style="font-weight: 700;">Ahmad Hidayat</div>
+                                <div style="font-size: 13px; color: #6b7280;">Kasir • Rp 90.000/hari</div>
+                                <div style="font-size: 13px; color: #6b7280;">Shift: Sen-Sab, 09:00–18:00</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="badge badge-info">Dibayar</span>
+                            <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">Escrow aktif</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" onclick="showScreen('umkm-payment-detail')" style="cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 32px;">👤</div>
+                            <div>
+                                <div style="font-weight: 700;">Dewi Lestari</div>
+                                <div style="font-size: 13px; color: #6b7280;">Pelayan • Rp 85.000/hari</div>
+                                <div style="font-size: 13px; color: #6b7280;">Shift: Sel-Sab, 10:00–19:00</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="badge badge-warning">Belum Dibayar</span>
+                            <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">14 hari</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- UMKM Payment Detail -->
         <div id="umkm-payment-detail" class="screen">
             <div class="header">
-                <button class="back-btn" onclick="showScreen('umkm-payment-history')">←</button>
-                <div class="header-title">Detail Pembayaran</div>
+                <button class="back-btn" onclick="history.back ? showScreen('umkm-active-workers') : showScreen('umkm-candidate-select')">←</button>
+                <div class="header-title">Konfirmasi Pembayaran</div>
             </div>
             <div class="content">
+                <div class="card" style="background: #dbeafe; border: 2px solid #2563EB;">
+                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">📋 Pembayaran Langsung ke Escrow</div>
+                    <div style="font-size: 14px; color: #1e40af;">Ini adalah pembayaran per transaksi. Dana Anda langsung ditahan di escrow dan akan cair otomatis ke pekerja setelah pekerjaan selesai dikonfirmasi.</div>
+                </div>
                 <div class="card">
-                    <div class="label">Pekerja</div>
-                    <div style="font-weight: 600; margin-top: 8px;">Siti Aminah - Barista</div>
+                    <div class="label">Pekerja yang Direkrut</div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 12px;">
+                        <div style="font-size: 32px;">👤</div>
+                        <div>
+                            <div style="font-weight: 700;">Siti Aminah</div>
+                            <div style="font-size: 14px; color: #6b7280;">Barista • ⭐ 4.8</div>
+                        </div>
+                    </div>
                     <div class="label" style="margin-top: 16px;">Periode Kerja</div>
-                    <div style="font-weight: 600; margin-top: 8px;">15 Jan - 15 Feb 2024</div>
+                    <div style="font-weight: 600; margin-top: 8px;">15 Jan - 15 Feb 2024 (30 hari)</div>
                 </div>
                 <div class="card">
                     <div class="label" style="margin-bottom: 12px;">Rincian Biaya</div>
@@ -1594,11 +1689,11 @@
                         <span style="font-weight: 600;">Rp 150.000</span>
                     </div>
                     <div class="list-item" style="border: none; padding-top: 12px; border-top: 2px solid #e5e7eb;">
-                        <span style="font-weight: 700; font-size: 16px;">Total</span>
+                        <span style="font-weight: 700; font-size: 16px;">Total Bayar Sekarang</span>
                         <span style="font-weight: 700; font-size: 18px; color: #2563EB;">Rp 3.150.000</span>
                     </div>
                 </div>
-                <button class="btn-primary" onclick="showScreen('umkm-payment-pay')">Bayar ke Escrow</button>
+                <button class="btn-primary" onclick="showScreen('umkm-payment-pay')">Pilih Metode Bayar →</button>
             </div>
         </div>
 
@@ -1606,46 +1701,52 @@
         <div id="umkm-payment-pay" class="screen">
             <div class="header">
                 <button class="back-btn" onclick="showScreen('umkm-payment-detail')">←</button>
-                <div class="header-title">Pembayaran</div>
+                <div class="header-title">Bayar ke Escrow</div>
             </div>
             <div class="content">
                 <div class="card" style="background: linear-gradient(135deg, #2563EB 0%, #1d4ed8 100%); color: white;">
-                    <div style="opacity: 0.9; margin-bottom: 8px;">Total Pembayaran</div>
+                    <div style="opacity: 0.9; margin-bottom: 4px; font-size: 14px;">Pembayaran Langsung ke Escrow</div>
                     <div style="font-size: 32px; font-weight: 700;">Rp 3.150.000</div>
+                    <div style="opacity: 0.8; font-size: 12px; margin-top: 4px;">Untuk: Siti Aminah (Barista)</div>
                 </div>
                 <div class="card">
-                    <div class="label">Metode Pembayaran</div>
-                    <div class="card" style="border: 2px solid #2563EB; margin-top: 12px; margin-bottom: 8px;">
+                    <div class="label">Pilih Metode Pembayaran</div>
+                    <div class="card" style="border: 2px solid #2563EB; margin-top: 12px; margin-bottom: 8px; cursor: pointer;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="font-size: 24px;">💳</div>
+                                <div style="font-size: 24px;">�</div>
                                 <div style="font-weight: 600;">GoPay</div>
                             </div>
-                            <div style="color: #2563EB;">●</div>
+                            <div style="color: #2563EB; font-size: 18px;">●</div>
                         </div>
                     </div>
-                    <div class="card" style="margin-bottom: 8px;">
+                    <div class="card" style="margin-bottom: 8px; cursor: pointer;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <div style="font-size: 24px;">🏦</div>
                                 <div style="font-weight: 600;">Transfer Bank</div>
                             </div>
-                            <div style="color: #e5e7eb;">○</div>
+                            <div style="color: #e5e7eb; font-size: 18px;">○</div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card" style="cursor: pointer;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <div style="font-size: 24px;">💳</div>
                                 <div style="font-weight: 600;">Kartu Kredit/Debit</div>
                             </div>
-                            <div style="color: #e5e7eb;">○</div>
+                            <div style="color: #e5e7eb; font-size: 18px;">○</div>
                         </div>
                     </div>
                 </div>
-                <div class="card" style="background: #dbeafe; border: 2px solid #2563EB;">
-                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">ℹ️ Informasi</div>
-                    <div style="font-size: 14px; color: #1e40af;">Dana akan disimpan di escrow dan baru dicairkan setelah pekerjaan selesai.</div>
+                <div class="card" style="background: #d1fae5; border: 2px solid #10b981;">
+                    <div style="font-weight: 600; color: #065f46; margin-bottom: 4px;">✓ Cara Kerja Pembayaran</div>
+                    <div style="font-size: 13px; color: #065f46; line-height: 1.7;">
+                        1. Dana Anda langsung masuk ke escrow ShiftMate<br>
+                        2. Tidak ada saldo dompet — ini pembayaran per transaksi<br>
+                        3. Dana cair <strong>otomatis</strong> ke pekerja setelah Anda konfirmasi selesai<br>
+                        4. Jika ada sengketa, dana dikembalikan ke metode pembayaran asal
+                    </div>
                 </div>
                 <button class="btn-primary" onclick="showScreen('umkm-escrow-status')">Bayar Sekarang</button>
             </div>
@@ -1655,7 +1756,7 @@
         <div id="umkm-escrow-status" class="screen">
             <div class="header">
                 <button class="back-btn" onclick="showScreen('umkm-payment-history')">←</button>
-                <div class="header-title">Status Escrow</div>
+                <div class="header-title">Dana Ditahan di Escrow</div>
             </div>
             <div class="content">
                 <div class="card">
@@ -1693,7 +1794,7 @@
                 </div>
                 <div class="card" style="background: #fef3c7;">
                     <div style="font-weight: 600; color: #92400e; margin-bottom: 4px;">⏳ Menunggu Penyelesaian</div>
-                    <div style="font-size: 14px; color: #92400e;">Dana akan dicairkan setelah Anda mengkonfirmasi pekerjaan selesai.</div>
+                    <div style="font-size: 14px; color: #92400e;">Dana akan dicairkan <strong>OTOMATIS</strong> ke pekerja setelah Anda mengkonfirmasi pekerjaan selesai. Anda tidak perlu melakukan transfer manual.</div>
                 </div>
                 <button class="btn-primary" onclick="showScreen('umkm-payment-confirm')">Konfirmasi Selesai</button>
                 <button class="btn-secondary" onclick="showScreen('umkm-escrow-dispute')">Ajukan Sengketa</button>
@@ -1816,6 +1917,16 @@
                 <div class="header-title">Riwayat Pembayaran</div>
             </div>
             <div class="content">
+                <div class="card" style="background: #d1fae5; border: 2px solid #10b981; cursor: pointer;" onclick="showScreen('umkm-active-workers')">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="font-size: 32px;">💰</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 700; color: #065f46; margin-bottom: 4px;">Bayar Gaji Pekerja</div>
+                            <div style="font-size: 14px; color: #065f46;">Pilih pekerja aktif untuk dibayar langsung ke escrow</div>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color: #10b981;"></i>
+                    </div>
+                </div>
                 <div class="card" onclick="showScreen('umkm-payment-status')">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
                         <div>
@@ -1901,6 +2012,11 @@
                 <textarea class="input-field" rows="4" placeholder="Jelaskan masalah secara detail..."></textarea>
                 <label class="label">Upload Bukti</label>
                 <button class="btn-secondary" style="margin-top: 8px;">📷 Upload Foto/Dokumen</button>
+                <div class="card" style="background: #e0f2fe; border: 1px solid #0284c7; margin-top: 16px;">
+                    <div style="font-size: 14px; color: #075985;">
+                        <strong>📌 Catatan:</strong> Jika sengketa dimenangkan, dana akan dikembalikan 100% ke metode pembayaran asal (bukan ke saldo aplikasi).
+                    </div>
+                </div>
                 <button class="btn-primary" onclick="showScreen('umkm-escrow-status')">Kirim Sengketa</button>
             </div>
         </div>
@@ -1943,6 +2059,7 @@
                     </div>
                 </div>
                 <button class="btn-primary" onclick="showScreen('umkm-contract-status')">Lihat Status Kontrak</button>
+                <button class="btn-primary" onclick="showScreen('umkm-payment-detail')" style="background: #10b981; margin-top: 8px;">💰 Bayar Gaji Pekerja Ini</button>
                 <button class="btn-outline" onclick="showScreen('umkm-contract-renew')">Perpanjang Kontrak</button>
             </div>
         </div>
@@ -2327,6 +2444,51 @@
                     <div class="nav-icon"><i class="fas fa-user"></i></div>
                     <div>Profil</div>
                 </button>
+            </div>
+        </div>
+
+        <!-- Pekerja Payout Method -->
+        <div id="pekerja-payout-method" class="screen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('pekerja-profile')">←</button>
+                <div class="header-title">Metode Pencairan</div>
+            </div>
+            <div class="content">
+                <div class="card">
+                    <div class="label">Metode Pencairan Terdaftar</div>
+                    <div style="margin-top: 12px; padding: 12px; background: #f8fafc; border-radius: 12px; border: 2px solid #2563EB;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight: 600;">GoPay</div>
+                                <div style="font-size: 14px; color: #6b7280;">0812****6789</div>
+                            </div>
+                            <span class="badge badge-success">Aktif</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div style="font-weight: 600; margin-bottom: 12px;">Tambah/Ubah Metode Pencairan</div>
+                    <label class="label">Pilih Metode Pencairan</label>
+                    <select class="input-field">
+                        <option>Pilih Metode</option>
+                        <option>GoPay</option>
+                        <option>OVO</option>
+                        <option>Dana</option>
+                        <option>Rekening Bank BCA</option>
+                        <option>Rekening Bank Mandiri</option>
+                        <option>Rekening Bank BRI</option>
+                        <option>Rekening Bank BNI</option>
+                    </select>
+                    <label class="label">Nomor / Rekening</label>
+                    <input type="text" class="input-field" placeholder="Masukkan nomor atau rekening">
+                    <label class="label">Nama Pemilik</label>
+                    <input type="text" class="input-field" placeholder="Sesuai akun/rekening">
+                </div>
+                <div class="card" style="background: #dbeafe; border: 2px solid #2563EB;">
+                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 4px;">💡 Informasi Penting</div>
+                    <div style="font-size: 14px; color: #1e40af;">Dana akan dicairkan OTOMATIS ke metode pencairan ini setelah pekerjaan selesai dikonfirmasi oleh UMKM.</div>
+                </div>
+                <button class="btn-primary" onclick="showScreen('pekerja-profile')">Simpan Metode</button>
             </div>
         </div>
 
@@ -3212,7 +3374,7 @@
                 </div>
                 <div class="card" style="background: #fef3c7;">
                     <div style="font-weight: 600; color: #92400e; margin-bottom: 4px;">⏳ Menunggu Konfirmasi</div>
-                    <div style="font-size: 14px; color: #92400e;">UMKM sedang mengkonfirmasi penyelesaian pekerjaan. Dana akan segera dicairkan.</div>
+                    <div style="font-size: 14px; color: #92400e;">Dana akan dicairkan OTOMATIS ke metode pencairan Anda setelah UMKM mengkonfirmasi.</div>
                 </div>
             </div>
         </div>
@@ -3267,7 +3429,7 @@
                 <div class="card" style="text-align: center; padding: 40px 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
                     <div style="font-size: 64px; margin-bottom: 16px;">✓</div>
                     <div style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Dana Telah Dicairkan</div>
-                    <div style="opacity: 0.9;">Pembayaran berhasil ditransfer ke rekening Anda</div>
+                    <div style="opacity: 0.9;">Pembayaran otomatis berhasil dikirim ke metode pencairan Anda</div>
                 </div>
                 <div class="card">
                     <div class="list-item">
@@ -3275,8 +3437,8 @@
                         <span style="font-weight: 700; font-size: 18px; color: #2563EB;">Rp 100.333</span>
                     </div>
                     <div class="list-item">
-                        <span>Metode</span>
-                        <span style="font-weight: 600;">GoPay</span>
+                        <span>Metode Pencairan</span>
+                        <span style="font-weight: 600;">💚 GoPay • 0812****6789</span>
                     </div>
                     <div class="list-item">
                         <span>Tanggal</span>
@@ -3320,6 +3482,11 @@
                 <textarea class="input-field" rows="4" placeholder="Jelaskan masalah secara detail..."></textarea>
                 <label class="label">Upload Bukti</label>
                 <button class="btn-secondary" style="margin-top: 8px;">📷 Upload Foto/Dokumen</button>
+                <div class="card" style="background: #e0f2fe; border: 1px solid #0284c7; margin-top: 16px;">
+                    <div style="font-size: 14px; color: #075985;">
+                        <strong>📌 Catatan:</strong> Jika sengketa dimenangkan, dana akan dikembalikan 100% ke metode pembayaran asal (bukan ke saldo aplikasi).
+                    </div>
+                </div>
                 <button class="btn-primary" onclick="showScreen('pekerja-payment-status')">Kirim Sengketa</button>
             </div>
         </div>
@@ -3723,6 +3890,15 @@
                         <div style="display: flex; align-items: center; gap: 12px;">
                             <div style="font-size: 24px;">📊</div>
                             <div style="font-weight: 600;">Laporan Kinerja</div>
+                        </div>
+                        <div>›</div>
+                    </div>
+                </div>
+                <div class="card" onclick="showScreen('pekerja-payout-method')">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="font-size: 24px;">💳</div>
+                            <div style="font-weight: 600;">Metode Pencairan</div>
                         </div>
                         <div>›</div>
                     </div>
